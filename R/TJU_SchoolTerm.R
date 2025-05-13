@@ -17,8 +17,13 @@
 #' @importFrom lubridate year month
 #' @export
 TJU_SchoolTerm <- function(x) {
-  trm <- cut.default(month(x), breaks = c(1, 4, 7, 9, 12), include.lowest = TRUE, right = FALSE, 
-                     labels = c('Winter', 'Spring', 'Summer', 'Fall'))
-  paste(as.character.factor(trm), year(x))
+  x |>
+    month() |>
+    cut.default(
+      breaks = c(1, 4, 7, 9, 12), include.lowest = TRUE, right = FALSE, 
+      labels = c('Winter', 'Spring', 'Summer', 'Fall')
+    ) |>
+    as.character.factor() |> 
+    paste(year(x))
 }
 
