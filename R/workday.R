@@ -34,7 +34,7 @@
 #' @examples
 #' '2025 Q1' |> zoo::as.yearqtr() |> workday() |> table()
 #' 
-#' '2025 Q1' |> 
+#' '2025 Q2' |> 
 #'  zoo::as.yearqtr() |>
 #'  workday(vacation = seq.Date(
 #'   from = as.Date('2025-04-10'), to = as.Date('2025-04-24'), by = 1
@@ -99,11 +99,11 @@ workday <- function(
   if (!missing(vacation)) {
     if (!inherits(vacation, what = 'Date')) stop('`vacation` must be Date object')
     if (any(vholiday <- vacation %in% x_dt[id_holiday])) {
-      message('Vacation day(s) ', sQuote(vacation[vholiday]), ' are holiday(s).')
+      message('Vacation days ', paste(vacation[vholiday], collapse = ', '), ' are holidays.')
       vacation <- vacation[!vholiday]
     }
     if (any(vweekend <- vacation %in% x_dt[id_weekend])) {
-      message('Vacation day(s) ', sQuote(vacation[vweekend]), ' are weekend(s).')
+      message('Vacation days ', paste(vacation[vweekend], collapse = ', '), ' are weekends.')
       vacation <- vacation[!vweekend]
     }
     #if (any(vout <- !(vacation %in% x_dt))) {

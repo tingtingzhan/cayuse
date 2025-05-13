@@ -44,7 +44,7 @@ If a holiday is on Sunday, then the following Monday is considered to be a weeke
 \examples{
 '2025 Q1' |> zoo::as.yearqtr() |> workday() |> table()
 
-'2025 Q1' |> 
+'2025 Q2' |> 
  zoo::as.yearqtr() |>
  workday(vacation = seq.Date(
   from = as.Date('2025-04-10'), to = as.Date('2025-04-24'), by = 1
