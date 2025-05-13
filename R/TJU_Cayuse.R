@@ -40,7 +40,7 @@
 #' @importFrom lubridate year
 #' @importFrom utils read.csv write.table
 #' @importFrom factor.tzh factor<-
-#' @importFrom ThomasJeffersonUniv style_basename
+#' @importFrom cli col_yellow
 #' @export
 aggregateAwards <- function(
     path = '~/Downloads', 
@@ -49,7 +49,8 @@ aggregateAwards <- function(
   
   fls <- list.files(path = path, pattern = '^Awards_.*\\.csv$', full.names = TRUE)
   if (!length(fls)) stop('Awards file not downloaded?')
-  message('\u261e ', style_basename(fl <- sort.int(fls, decreasing = TRUE)[1L]))
+  fl <- sort.int(fls, decreasing = TRUE)[1L]
+  message('\u261e ', fl |> basename() |> col_yellow())
   
   awards <- read.csv(file = fl, header = TRUE) |>
     # subset.data.frame(subset = startsWith(Status, prefix = 'Funded')) # I dont understand this yet
@@ -119,13 +120,14 @@ aggregate_award_ <- function(x) {
 
 
 #' @rdname TJU_Cayuse
-#' @importFrom ThomasJeffersonUniv style_basename
+#' @importFrom cli col_yellow
 #' @export
 viewProposal <- function(path = '~/Downloads', fiscal.year = year(Sys.Date())) {
   
   proposal_csv_ <- list.files(path = path, pattern = '^proposals_.*\\.csv$', full.names = TRUE)
   if (!length(proposal_csv_)) stop('Proposal file not downloaded?')
-  message('\u261e ', style_basename(proposal_csv <- sort.int(proposal_csv_, decreasing = TRUE)[1L]))
+  proposal_csv <- sort.int(proposal_csv_, decreasing = TRUE)[1L]
+  message('\u261e ', proposal_csv |> basename() |> col_yellow())
   
   dim(proposal0 <- read.csv(file = proposal_csv, header = TRUE))
   
