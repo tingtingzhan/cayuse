@@ -1,0 +1,18 @@
+Package: cayuse
+Type: Package
+Title: cayuse
+Version: 0.2.3
+Date: 2025-04-27
+Description: cayuse.
+License: GPL-2
+Encoding: UTF-8
+Authors@R: c(person(given = "Tingting", family = "Zhan", role =
+       c("aut", "cre"), email = "tingtingzhan@gmail.com", comment
+       = c(ORCID = '0000-0001-9971-4844')))
+Language: en-US
+Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.5.0)
+Imports: lubridate, timeDate, zoo, factor.tzh, ThomasJeffersonUniv
+Suggests: knitr, quarto, rmarkdown
+RoxygenNote: 7.3.2
+VignetteBuilder: quarto
