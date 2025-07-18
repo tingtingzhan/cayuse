@@ -122,39 +122,47 @@ aggregate_award_ <- function(x) {
 #' @rdname TJU_Cayuse
 #' @importFrom cli col_yellow
 #' @export
-viewProposal <- function(path = '~/Downloads', fiscal.year = year(Sys.Date())) {
+viewProposal <- function(
+    path = '~/Downloads', 
+    fiscal.year = year(Sys.Date())
+) {
   
   proposal_csv_ <- list.files(path = path, pattern = '^proposals_.*\\.csv$', full.names = TRUE)
   if (!length(proposal_csv_)) stop('Proposal file not downloaded?')
+  
   proposal_csv <- sort.int(proposal_csv_, decreasing = TRUE)[1L]
   message('\u261e ', proposal_csv |> basename() |> col_yellow())
   
-  dim(proposal0 <- read.csv(file = proposal_csv, header = TRUE))
+  proposal <- proposal_csv |>
+    read.csv(header = TRUE) |>
+    within.data.frame(expr = {
+      Prop.No <- trimws(Prop.No)
+      Lead.PI <- gsub(' AOI$', replacement = '', x = Lead.PI)
+      Submitted.Date <- as.Date.character(Submitted.Date, format = '%m/%d/%Y')
+      Submitted_FY <- .bincode(Submitted.Date, breaks = TJU_Fiscal_Year(fiscal.year)) # NA, 1, NA
+      #Submitted_Term <- sprintf(fmt = '%s (%s)', TJU_SchoolTerm(Submitted.Date), as.character(Submitted.Date))
+      Submitted_Term <- TJU_SchoolTerm(Submitted.Date)
+    }) |>
+    subset.data.frame(
+      subset = eval(quote(!is.na(Submitted_FY) & !(Status %in% c('Abandoned', 'Withdrawn')))),
+      select = c('Status', 'Submitted_Term', 'Submitted.Date', 'Project.Name', 'Sponsor', 'My.Role', 'Lead.PI')
+    ) |>
+    #sort_by.data.frame(y = ~ list(- Submitted.Date), ) # error: unary - is not defined for "Date" objects
+    sort_by.data.frame(y = ~ Submitted.Date)
   
-  proposal1 <- within.data.frame(data = proposal0, expr = {
-    Prop.No <- trimws(Prop.No)
-    Lead.PI <- gsub(' AOI$', replacement = '', x = Lead.PI)
-    Submitted.Date <- as.Date.character(Submitted.Date, format = '%m/%d/%Y')
-    Submitted_FY <- .bincode(Submitted.Date, breaks = TJU_Fiscal_Year(fiscal.year)) # NA, 1, NA
-    Submitted_Term <- TJU_SchoolTerm(Submitted.Date)
-  })
-  
-  # status_rm <- c('Not Funded', 'Funded', 'Abandoned', 'Withdrawn', 'TJU Signing Official')
-  status_rm <- c('Funded', 'Abandoned', 'Withdrawn', 'TJU Signing Official')
-  dim(proposal <- eval(quote(subset(x = proposal1, subset = !is.na(Submitted_FY) & !(Status %in% status_rm)))))
   if (FALSE) { #manually inspect
+    dim(proposal)
     table(proposal$Submitted.Date, useNA = 'ifany')
     table(proposal$Status, useNA = 'ifany')
     length(unique(proposal$Lead.PI))
   }
   
-  # copy to Interfolio
-  view_by_row(proposal[c(
-    'Status', 'Submitted_Term', 
-    'Project.Name', 'Sponsor', 
-    # 'Prop.No', 
-    'My.Role', 'Lead.PI')])
+  # copy screen output to Interfolio
+  proposal |> 
+    view_by_row()
+  
   return(invisible(proposal))
+  
 }
 
 
@@ -175,15 +183,20 @@ if (FALSE) {
 
 #' @importFrom ThomasJeffersonUniv format_named
 view_by_row <- function(data) {
-  nr <- .row_names_info(data, type = 2L)
+  
+  rseq <- data |> 
+    .row_names_info(type = 2L) |>
+    seq_len()
+  
   .mapply(FUN = \(x, nm) {
     message('Row ', sQuote(nm))
-    x |> format_named() |> lapply(FUN = message)
-    cat('\n')
+    x |> 
+      format_named()
   }, dots = list(
-    x = split.data.frame(data, f = seq_len(nr)), 
-    nm = seq_len(nr)
+    x = split.data.frame(data, f = rseq), 
+    nm = rseq
   ), MoreArgs = NULL)
+  
   return(invisible())
 }
 
