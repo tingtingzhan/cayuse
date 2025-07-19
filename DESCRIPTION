@@ -11,7 +11,7 @@ Authors@R: c(person(given = "Tingting", family = "Zhan", role =
 Language: en-US
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.5.0)
-Imports: cli, lubridate, timeDate, zoo, factor.tzh, ThomasJeffersonUniv
+Imports: cli, lubridate, timeDate, zoo, factor.tzh, sideway
 Suggests: knitr, quarto, rmarkdown
 RoxygenNote: 7.3.2
 VignetteBuilder: quarto

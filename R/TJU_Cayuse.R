@@ -39,8 +39,9 @@
 #' @name TJU_Cayuse
 #' @importFrom lubridate year
 #' @importFrom utils read.csv write.table
-#' @importFrom factor.tzh factor<-
 #' @importFrom cli col_yellow
+#' @importFrom factor.tzh factor<-
+#' @importFrom sideway sideway
 #' @export
 aggregateAwards <- function(
     path = '~/Downloads', 
@@ -80,10 +81,12 @@ aggregateAwards <- function(
     }) |>
     sort_by.data.frame(y = ~ Status2 + Award.End.Date, decreasing = TRUE)
   
-  view_by_row(awards[c(
+  awards[c(
     'Award.No.', 
     'Status2', 
-    'Project.Title', 'Lead.PI', 'Sponsor', 'Award.Amount', 'Time.Period', 'Award.Period')])
+    'Project.Title', 'Lead.PI', 'Sponsor', 'Award.Amount', 'Time.Period', 'Award.Period'
+  )] |>
+    sideway()
   
   # message('\u21ac Fill in `Effort` by clicking into each project under \'Active Projects\'')
   return(invisible(awards))
@@ -121,6 +124,7 @@ aggregate_award_ <- function(x) {
 
 #' @rdname TJU_Cayuse
 #' @importFrom cli col_yellow
+#' @importFrom sideway sideway
 #' @export
 viewProposal <- function(
     path = '~/Downloads', 
@@ -159,15 +163,11 @@ viewProposal <- function(
   
   # copy screen output to Interfolio
   proposal |> 
-    view_by_row()
+    sideway()
   
   return(invisible(proposal))
   
 }
-
-
-
-
 
 
 
@@ -178,28 +178,4 @@ if (FALSE) {
   proposalFunded[c('Lead.PI', 'Project.Name')]
   subset(awards, OnGoing, select = c('Lead.PI', 'Project.Title'))
 }
-
-
-
-#' @importFrom ThomasJeffersonUniv format_named
-view_by_row <- function(data) {
-  
-  rseq <- data |> 
-    .row_names_info(type = 2L) |>
-    seq_len()
-  
-  .mapply(FUN = \(x, nm) {
-    message('Row ', sQuote(nm))
-    x |> 
-      format_named()
-  }, dots = list(
-    x = split.data.frame(data, f = rseq), 
-    nm = rseq
-  ), MoreArgs = NULL)
-  
-  return(invisible())
-}
-
-
-
 
