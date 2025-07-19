@@ -40,7 +40,6 @@
 #' @importFrom lubridate year
 #' @importFrom utils read.csv
 #' @importFrom cli col_yellow
-#' @importFrom factor.tzh factor<-
 #' @importFrom sideway sideway
 #' @export
 viewAward <- function(
