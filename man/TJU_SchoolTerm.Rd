@@ -21,3 +21,4 @@ c('2021-03-14', '2022-01-01', '2022-05-01') |>
  TJU_SchoolTerm()
 
 }
+\keyword{internal}

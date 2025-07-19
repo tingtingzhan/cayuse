@@ -15,7 +15,7 @@
 #' 
 #' @details 
 #' \itemize{
-#' \item {go to `https://jefferson.cayuse424.com/sp/index.cfm` in Chrome (Safari has bugs)}
+#' \item {go to `https://jefferson.cayuse424.com/sp/index.cfm`}
 #' \item {My Proposals -> Submitted Proposals. 
 #'   Lower-right corner of screen, 'Export to CSV'.
 #'   Downloaded file has name pattern `'^proposals_.*\\.csv'`}
@@ -26,24 +26,24 @@
 #'   'Sponsored Effort'}
 #' }
 #' 
-#' Function [aggregateAwards] aggregates grant over different period 
+#' Function [viewAward] aggregates grant over different period 
 #' (e.g. from Axx-xx-001, Axx-xx-002, Axx-xx-003 to Axx-xx).
 #' Then we need to manually added in our 'Sponsored Effort' in the returned `.csv` file.
 #' 
 #' @examples 
 #' if (FALSE) {
-#' aggregateAwards()
+#' viewAward()
 #' viewProposal()
 #' }
 #' 
 #' @name TJU_Cayuse
 #' @importFrom lubridate year
-#' @importFrom utils read.csv write.table
+#' @importFrom utils read.csv
 #' @importFrom cli col_yellow
 #' @importFrom factor.tzh factor<-
 #' @importFrom sideway sideway
 #' @export
-aggregateAwards <- function(
+viewAward <- function(
     path = '~/Downloads', 
     fiscal.year = year(Sys.Date())
 ) {
@@ -74,16 +74,19 @@ aggregateAwards <- function(
     subset.data.frame(subset = (Award.Amount > 0)) |>
     split.data.frame(f = ~ Award.No.) |>
     lapply(FUN = aggregate_award_) |>
-    do.call(what = rbind.data.frame) |> 
+    do.call(what = rbind.data.frame, args = _) |> 
     within.data.frame(expr = {
-      Status2 <- .bincode(as.double(Award.End.Date), breaks = c(-Inf, as.double(TJU_Fiscal_Year(fiscal.year)), Inf), right = TRUE, include.lowest = TRUE)
-      factor(Status2) <- c(sprintf('Ends before FY%d', fiscal.year), sprintf('Ends in FY%d', fiscal.year), 'Ongoing')
+      Status2 <- Award.End.Date |> 
+        as.double() |> 
+        cut.default(
+          breaks = c(-Inf, as.double(TJU_Fiscal_Year(fiscal.year)), Inf), 
+          labels = c(sprintf('Ends before FY%d', fiscal.year), sprintf('Ends in FY%d', fiscal.year), 'Ongoing'),
+          right = TRUE, include.lowest = TRUE, ordered_result = TRUE)
     }) |>
     sort_by.data.frame(y = ~ Status2 + Award.End.Date, decreasing = TRUE)
   
   awards[c(
-    'Award.No.', 
-    'Status2', 
+    'Award.No.', 'Status2',
     'Project.Title', 'Lead.PI', 'Sponsor', 'Award.Amount', 'Time.Period', 'Award.Period'
   )] |>
     sideway()
@@ -141,11 +144,14 @@ viewProposal <- function(
     read.csv(header = TRUE) |>
     within.data.frame(expr = {
       Prop.No <- trimws(Prop.No)
-      Lead.PI <- gsub(' AOI$', replacement = '', x = Lead.PI)
-      Submitted.Date <- as.Date.character(Submitted.Date, format = '%m/%d/%Y')
-      Submitted_FY <- .bincode(Submitted.Date, breaks = TJU_Fiscal_Year(fiscal.year)) # NA, 1, NA
-      #Submitted_Term <- sprintf(fmt = '%s (%s)', TJU_SchoolTerm(Submitted.Date), as.character(Submitted.Date))
-      Submitted_Term <- TJU_SchoolTerm(Submitted.Date)
+      Lead.PI <- Lead.PI |> 
+        gsub(pattern = ' AOI$', replacement = '', x = _)
+      Submitted.Date <- Submitted.Date |>
+        as.Date.character(format = '%m/%d/%Y')
+      Submitted_FY <- Submitted.Date |>
+        .bincode(breaks = TJU_Fiscal_Year(fiscal.year)) # NA, 1, NA
+      Submitted_Term <- Submitted.Date |>
+        TJU_SchoolTerm()
     }) |>
     subset.data.frame(
       subset = eval(quote(!is.na(Submitted_FY) & !(Status %in% c('Abandoned', 'Withdrawn')))),

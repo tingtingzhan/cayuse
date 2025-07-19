@@ -2,11 +2,11 @@
 % Please edit documentation in R/TJU_Cayuse.R
 \name{TJU_Cayuse}
 \alias{TJU_Cayuse}
-\alias{aggregateAwards}
+\alias{viewAward}
 \alias{viewProposal}
 \title{Award & Effort from Cayuse}
 \usage{
-aggregateAwards(path = "~/Downloads", fiscal.year = year(Sys.Date()))
+viewAward(path = "~/Downloads", fiscal.year = year(Sys.Date()))
 
 viewProposal(path = "~/Downloads", fiscal.year = year(Sys.Date()))
 }
@@ -24,7 +24,7 @@ Print out grant and effort from Cayuse.
 }
 \details{
 \itemize{
-\item {go to \verb{https://jefferson.cayuse424.com/sp/index.cfm} in Chrome (Safari has bugs)}
+\item {go to \verb{https://jefferson.cayuse424.com/sp/index.cfm}}
 \item {My Proposals -> Submitted Proposals.
 Lower-right corner of screen, 'Export to CSV'.
 Downloaded file has name pattern \code{'^proposals_.*\\\\.csv'}}
@@ -35,13 +35,13 @@ Downloaded file has name pattern \code{'^Awards_.*\\\\.csv'}}
 'Sponsored Effort'}
 }
 
-Function \link{aggregateAwards} aggregates grant over different period
+Function \link{viewAward} aggregates grant over different period
 (e.g. from Axx-xx-001, Axx-xx-002, Axx-xx-003 to Axx-xx).
 Then we need to manually added in our 'Sponsored Effort' in the returned \code{.csv} file.
 }
 \examples{
 if (FALSE) {
-aggregateAwards()
+viewAward()
 viewProposal()
 }
 

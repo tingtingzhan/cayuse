@@ -8,12 +8,12 @@
 #' @returns 
 #' Function [TJU_SchoolTerm()] returns a \link[base]{character} \link[base]{vector}
 #' 
-#' 
 #' @examples 
 #' c('2021-03-14', '2022-01-01', '2022-05-01') |>
 #'  as.Date() |> 
 #'  TJU_SchoolTerm()
 #' 
+#' @keywords internal
 #' @importFrom lubridate year month
 #' @export
 TJU_SchoolTerm <- function(x) {
