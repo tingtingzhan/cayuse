@@ -24,8 +24,6 @@ year, e.g., \code{x = 2020L} returns all \link[base]{Date}s from 2020-01-01 to 2
 year-month object from package \CRANpkg{zoo}}
 \item{\link[zoo]{yearqtr}}{
 year-quarter object from package \CRANpkg{zoo}}
-\item{\link[base]{character}}{
-convertible to \link[zoo]{yearmon} or \link[zoo]{yearqtr} object}
 }}
 }
 \value{

@@ -143,8 +143,6 @@ workday <- function(
 #' year-month object from package \CRANpkg{zoo}}
 #' \item{\link[zoo]{yearqtr}}{
 #' year-quarter object from package \CRANpkg{zoo}}
-#' \item{\link[base]{character}}{
-#' convertible to \link[zoo]{yearmon} or \link[zoo]{yearqtr} object}
 #' }
 #' 
 #' @details
@@ -158,11 +156,13 @@ workday <- function(
 #' @export
 allDates <- function(x) {
   if (!length(x)) return(invisible())
-  if (inherits(x, what = 'Date')) return(x)
   if (anyNA(x)) stop('does not allow NA input')
   x <- unique(x) # ?base::unique.default ?zoo:::unique.yearmon ?zoo:::unique.yearqtr
+  if (inherits(x, what = 'Date')) return(x)
   UseMethod(generic = 'allDates')
 }
+
+
 
 #' @rdname allDates
 #' @export allDates.integer
@@ -170,9 +170,13 @@ allDates <- function(x) {
 allDates.integer <- function(x) { # `x` considered as year!
   x |>
     lapply(FUN = \(i) {
-      i1 <- as.Date.character(paste0(i, c('-01-01', '-12-31')), format = '%Y-%m-%d')
-      seq.Date(from = i1[1L], to = i1[2L], by = 1L)
-    }) |> do.call(what = c)
+      i |> 
+        paste0(c('-01-01', '-12-31')) |> 
+        as.Date.character(format = '%Y-%m-%d') |> 
+        as.list() |> 
+        do.call(what = seq.Date)
+    }) |> 
+    do.call(what = c.Date)
 }
 
 
@@ -183,9 +187,12 @@ allDates.integer <- function(x) { # `x` considered as year!
 allDates.yearmon <- function(x) {
   x |>
     lapply(FUN = \(i) {
-      seq.Date(from = as.Date.yearmon(i), to = as.Date.yearmon(i + 1/12) - 1L, by = 1L)
+      i |>
+        as.Date.yearmon(frac = c(0, 1)) |> 
+        as.list() |> 
+        do.call(what = seq.Date)
     }) |>
-    do.call(what = c)
+    do.call(what = c.Date)
 }
 
 #' @rdname allDates
@@ -195,8 +202,12 @@ allDates.yearmon <- function(x) {
 allDates.yearqtr <- function(x) {
   x |>
     lapply(FUN = \(i) {
-      seq.Date(from = as.Date.yearqtr(i), to = as.Date.yearqtr(i + 1/4) - 1L, by = 1L)
-    }) |> do.call(what = c)
+      i |>
+        as.Date.yearqtr(frac = c(0, 1)) |> 
+        as.list() |> 
+        do.call(what = seq.Date)
+    }) |> 
+    do.call(what = c.Date)
 }
 
 
