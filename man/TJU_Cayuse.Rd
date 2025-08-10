@@ -42,7 +42,7 @@ Then we need to manually added in our 'Sponsored Effort' in the returned \code{.
 \examples{
 if (FALSE) {
 viewAward()
-viewProposal() # 2025 Review: finished Row `17`, Hallgeir Rui, then system dies
+viewProposal()
 }
 
 }

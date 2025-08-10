@@ -33,7 +33,7 @@
 #' @examples 
 #' if (FALSE) {
 #' viewAward()
-#' viewProposal() # 2025 Review: finished Row `17`, Hallgeir Rui, then system dies
+#' viewProposal()
 #' }
 #' 
 #' @name TJU_Cayuse
