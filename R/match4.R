@@ -38,6 +38,8 @@ setMethod(
 setMethod(
   f = '%in%',
   signature = c(x = 'Date', table = 'yearqtr'), 
+  #definition = `%in%` # No! Error: C stack usage  7953680 is too close to the limit
+  #definition = base::`%in%` # No! returns `FALSE` when the answer should be `TRUE`
   definition = \(x, table) {
     match(x = x, table = table, nomatch = 0L) > 0L
   }

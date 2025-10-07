@@ -39,7 +39,6 @@
 #' @name TJU_Cayuse
 #' @importFrom lubridate year
 #' @importFrom utils read.csv
-#' @importFrom cli col_yellow
 #' @importFrom sideway sideway
 #' @export
 viewAward <- function(
@@ -125,7 +124,6 @@ aggregate_award_ <- function(x) {
 
 
 #' @rdname TJU_Cayuse
-#' @importFrom cli col_yellow
 #' @importFrom sideway sideway
 #' @export
 viewProposal <- function(

@@ -99,11 +99,19 @@ workday <- function(
   if (!missing(vacation)) {
     if (!inherits(vacation, what = 'Date')) stop('`vacation` must be Date object')
     if (any(vholiday <- vacation %in% x_dt[id_holiday])) {
-      message('Vacation days ', paste(vacation[vholiday], collapse = ', '), ' are holidays.')
+      vacation[vholiday] |> 
+        col_magenta() |> style_bold() |>
+        paste(collapse = ', ') |>
+        sprintf(fmt = 'Vacation days %s are holidays.') |>
+        message()
       vacation <- vacation[!vholiday]
     }
     if (any(vweekend <- vacation %in% x_dt[id_weekend])) {
-      message('Vacation days ', paste(vacation[vweekend], collapse = ', '), ' are weekends.')
+      vacation[vweekend] |>
+        col_cyan() |> style_bold() |>
+        paste(collapse = ', ') |>
+        sprintf(fmt = 'Vacation days %s are weekends.') |>
+        message()
       vacation <- vacation[!vweekend]
     }
     #if (any(vout <- !(vacation %in% x_dt))) {
