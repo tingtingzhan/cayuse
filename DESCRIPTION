@@ -1,7 +1,7 @@
 Package: cayuse
 Type: Package
 Title: cayuse
-Version: 0.2.3
+Version: 0.1.0
 Description: cayuse.
 License: GPL-2
 Encoding: UTF-8
