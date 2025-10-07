@@ -13,5 +13,5 @@ Roxygen: list(markdown = TRUE)
 Depends: R (>= 4.5.0)
 Imports: cli, lubridate, timeDate, zoo, sideway
 Suggests: knitr, quarto, rmarkdown
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: quarto
