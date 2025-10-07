@@ -6,6 +6,8 @@
 \alias{\%in\%,Date,yearqtr-method}
 \alias{match,Date,yearmon-method}
 \alias{\%in\%,Date,yearmon-method}
+\alias{match,Date,timeDate-method}
+\alias{\%in\%,Date,timeDate-method}
 \title{Match \link[base]{Date} to \link[zoo]{yearmon} and \link[zoo]{yearqtr}}
 \usage{
 \S4method{match}{Date,yearqtr}(x, table, nomatch = NA_integer_, incomparables = NULL)
@@ -15,6 +17,10 @@
 \S4method{match}{Date,yearmon}(x, table, nomatch = NA_integer_, incomparables = NULL)
 
 \S4method{\%in\%}{Date,yearmon}(x, table)
+
+\S4method{match}{Date,timeDate}(x, table, nomatch = NA_integer_, incomparables = NULL)
+
+\S4method{\%in\%}{Date,timeDate}(x, table)
 }
 \arguments{
 \item{x}{\link[base]{Date}}
@@ -29,8 +35,11 @@ Match \link[base]{Date} to \link[zoo]{yearmon} and \link[zoo]{yearqtr}
 \examples{
 match(x = as.Date('2025-10-24'), table = zoo::as.yearqtr('2025 Q4'))
 stopifnot(as.Date('2025-10-24') \%in\% zoo::as.yearqtr('2025 Q4'))
-
 match(x = as.Date('2025-10-24'), table = zoo::as.yearmon('2025-10'))
 stopifnot(as.Date('2025-10-24') \%in\% zoo::as.yearmon('2025-10'))
+library(timeDate)
+(td = holiday(year = 2025, c('USMLKingsBirthday', 'USMemorialDay')))
+match(x = as.Date('2025-01-20'), table = td)
+stopifnot(as.Date('2025-01-20') \%in\% td)
 }
 \keyword{internal}

@@ -49,7 +49,7 @@
 #' 
 #' @keywords internal
 #' @importFrom lubridate year
-#' @importFrom timeDate holiday as.Date.timeDate USNewYearsDay USMLKingsBirthday USMemorialDay USIndependenceDay USLaborDay USThanksgivingDay USChristmasDay
+#' @importFrom timeDate holiday USNewYearsDay USMLKingsBirthday USMemorialDay USIndependenceDay USLaborDay USThanksgivingDay USChristmasDay
 #' @export
 workday <- function(
     x, 
@@ -64,7 +64,7 @@ workday <- function(
   dt_ext <- c(x_dt[1L] - 1L, x_dt, x_dt[nx] + 1L)
   
   wkd <- format.Date(dt_ext, format = '%a') # ?base::weekdays.Date
-  id_holiday <- dt_ext %in% as.Date.timeDate(holiday(year = unique.default(year(dt_ext)), Holiday = holiday))
+  id_holiday <- dt_ext %in% holiday(year = unique.default(year(dt_ext)), Holiday = holiday) # my S4 `%in%` !!!
   id_weekend <- wkd %in% c('Sat', 'Sun')
   
   if (any(id_holiday & id_weekend)) {
