@@ -173,6 +173,9 @@ allDates <- function(x) {
 
 
 #' @rdname allDates
+#' @examples
+#' 2025L |>
+#'   allDates()
 #' @export allDates.integer
 #' @export
 allDates.integer <- function(x) { # `x` considered as year!
@@ -182,9 +185,9 @@ allDates.integer <- function(x) { # `x` considered as year!
         paste0(c('-01-01', '-12-31')) |> 
         as.Date.character(format = '%Y-%m-%d') |> 
         as.list() |> 
-        do.call(what = seq.Date)
+        do.call(what = seq.Date, args = _)
     }) |> 
-    do.call(what = c.Date)
+    do.call(what = c.Date, args = _)
 }
 
 
@@ -201,16 +204,15 @@ allDates.yearmon <- function(x) {
       i |>
         as.Date.yearmon(frac = c(from = 0, to = 1)) |> 
         as.list() |> 
-        do.call(what = seq.Date)
+        do.call(what = seq.Date, args = _)
     }) |>
-    do.call(what = c.Date)
+    do.call(what = c.Date, args = _)
 }
 
 #' @rdname allDates
 #' @examples
 #' zoo::as.yearqtr('2025 Q2') |>
 #'  allDates()
-#' 
 #' @importFrom zoo as.Date.yearqtr
 #' @export allDates.yearqtr
 #' @export

@@ -36,10 +36,11 @@ Find all \link[base]{Date}s in a time interval.
 Function \code{\link[=allDates]{allDates()}} returns all \link[base]{Date}s in a given time interval.
 }
 \examples{
+2025L |>
+  allDates()
 zoo::as.yearmon('2025-1') |>
  allDates()
 zoo::as.yearqtr('2025 Q2') |>
  allDates()
-
 }
 \keyword{internal}
