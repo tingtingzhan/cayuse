@@ -2,24 +2,25 @@
 % Please edit documentation in R/workday.R
 \name{workday}
 \alias{workday}
-\title{Workdays}
+\title{Workdays, Weekends and Holidays}
 \usage{
 workday(
   x,
-  holiday = c("USNewYearsDay", "USMLKingsBirthday", "USMemorialDay", "USIndependenceDay",
+  Holiday = c("USNewYearsDay", "USMLKingsBirthday", "USMemorialDay", "USIndependenceDay",
     "USLaborDay", "USThanksgivingDay", "USChristmasDay"),
   vacation
 )
 }
 \arguments{
-\item{x}{\link[base]{character} scalar or \link[base]{vector} (e.g.,
-\code{'2021-01'} for January 2021,
-\code{'2021 Q1'} for 2021 Q1 (January to March)), or
-\link[base]{integer} scalar or \link[base]{vector} (e.g., \code{2021L} for year 2021);
-The time-span to be summarized.
-Objects of classes \link[zoo]{yearqtr} and \link[zoo]{yearmon} are also accepted.}
+\item{x}{time-span to be summarized.  Acceptable objects are
+\describe{
+\item{\link[base]{character} scalar or \link[base]{vector} of format \code{'YYYY-MM'}}{e.g., \code{'2021-01'} for January 2021}
+\item{\link[base]{character} scalar or \link[base]{vector} of format \code{'YYYY Q[1-4]'}}{e.g., \code{'2021 Q1'} for the first quarter of 2021 (January to March)}
+\item{\link[base]{integer} scalar or \link[base]{vector}}{e.g., \code{2021L} for year 2021}
+\item{\link[zoo]{yearqtr} and/or \link[zoo]{yearmon} objects}{e.g., \code{zoo::as.yearqtr('2025 Q2')} for the second quarter of 2025 (April to June)}
+}}
 
-\item{holiday}{\link[base]{character} \link[base]{vector}}
+\item{Holiday}{\link[base]{character} \link[base]{vector}, see function \link[timeDate]{holiday}}
 
 \item{vacation}{\link[base]{Date} \link[base]{vector}, vacation days}
 }
@@ -27,8 +28,8 @@ Objects of classes \link[zoo]{yearqtr} and \link[zoo]{yearmon} are also accepted
 Function \code{\link[=workday]{workday()}} returns a \link[base]{factor}.
 }
 \description{
-To summarize the number of workdays, weekends, holidays and vacations in a given time-span
-(e.g., a month or a quarter of a year).
+To summarize the number of workdays, weekends, holidays and vacations in a given time period,
+e.g., a month or a quarter of a year.
 }
 \details{
 Function \code{\link[=workday]{workday()}} summarizes the workdays, weekends,
@@ -42,7 +43,9 @@ if a holiday is on Saturday, then the preceding Friday is considered to be a wee
 If a holiday is on Sunday, then the following Monday is considered to be a weekend day.
 }
 \examples{
-'2025 Q1' |> zoo::as.yearqtr() |> workday() |> table()
+'2025 Q2' |> zoo::as.yearqtr() |> workday() |> table()
+'2025 Q3' |> zoo::as.yearqtr() |> workday() |> table()
+'2025 Q4' |> zoo::as.yearqtr() |> workday() |> table()
 
 '2025 Q2' |> 
  zoo::as.yearqtr() |>

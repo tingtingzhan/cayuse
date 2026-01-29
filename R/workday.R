@@ -1,18 +1,19 @@
 
-#' @title Workdays
+#' @title Workdays, Weekends and Holidays
 #' 
 #' @description
-#' To summarize the number of workdays, weekends, holidays and vacations in a given time-span 
-#' (e.g., a month or a quarter of a year).
+#' To summarize the number of workdays, weekends, holidays and vacations in a given time period, 
+#' e.g., a month or a quarter of a year.
 #' 
-#' @param x \link[base]{character} scalar or \link[base]{vector} (e.g.,
-#' `'2021-01'` for January 2021,
-#' `'2021 Q1'` for 2021 Q1 (January to March)), or
-#' \link[base]{integer} scalar or \link[base]{vector} (e.g., `2021L` for year 2021);
-#' The time-span to be summarized.
-#' Objects of classes \link[zoo]{yearqtr} and \link[zoo]{yearmon} are also accepted.
+#' @param x time-span to be summarized.  Acceptable objects are
+#' \describe{
+#' \item{\link[base]{character} scalar or \link[base]{vector} of format `'YYYY-MM'`}{e.g., `'2021-01'` for January 2021}
+#' \item{\link[base]{character} scalar or \link[base]{vector} of format `'YYYY Q[1-4]'`}{e.g., `'2021 Q1'` for the first quarter of 2021 (January to March)}
+#' \item{\link[base]{integer} scalar or \link[base]{vector}}{e.g., `2021L` for year 2021}
+#' \item{\link[zoo]{yearqtr} and/or \link[zoo]{yearmon} objects}{e.g., `zoo::as.yearqtr('2025 Q2')` for the second quarter of 2025 (April to June)}
+#' }
 #' 
-#' @param holiday \link[base]{character} \link[base]{vector}
+#' @param Holiday \link[base]{character} \link[base]{vector}, see function \link[timeDate]{holiday}
 #' 
 #' @param vacation \link[base]{Date} \link[base]{vector}, vacation days
 #' 
@@ -32,7 +33,9 @@
 #' Function [workday()] returns a \link[base]{factor}.
 #' 
 #' @examples
-#' '2025 Q1' |> zoo::as.yearqtr() |> workday() |> table()
+#' '2025 Q2' |> zoo::as.yearqtr() |> workday() |> table()
+#' '2025 Q3' |> zoo::as.yearqtr() |> workday() |> table()
+#' '2025 Q4' |> zoo::as.yearqtr() |> workday() |> table()
 #' 
 #' '2025 Q2' |> 
 #'  zoo::as.yearqtr() |>
@@ -53,7 +56,7 @@
 #' @export
 workday <- function(
     x, 
-    holiday = c('USNewYearsDay', 'USMLKingsBirthday', 'USMemorialDay', 'USIndependenceDay', 'USLaborDay', 'USThanksgivingDay', 'USChristmasDay'), # https://hr.jefferson.edu/benefits-compensation/paid-time-off.html
+    Holiday = c('USNewYearsDay', 'USMLKingsBirthday', 'USMemorialDay', 'USIndependenceDay', 'USLaborDay', 'USThanksgivingDay', 'USChristmasDay'), # https://hr.jefferson.edu/benefits-compensation/paid-time-off.html
     vacation
 ) {
   
@@ -64,7 +67,7 @@ workday <- function(
   dt_ext <- c(x_dt[1L] - 1L, x_dt, x_dt[nx] + 1L)
   
   wkd <- format.Date(dt_ext, format = '%a') # ?base::weekdays.Date
-  id_holiday <- dt_ext %in% holiday(year = unique.default(year(dt_ext)), Holiday = holiday) # my S4 `%in%` !!!
+  id_holiday <- dt_ext %in% holiday(year = unique.default(year(dt_ext)), Holiday = Holiday) # my S4 `%in%` !!!
   id_weekend <- wkd %in% c('Sat', 'Sun')
   
   if (any(id_holiday & id_weekend)) {
@@ -226,9 +229,5 @@ allDates.yearqtr <- function(x) {
     }) |> 
     do.call(what = c.Date, args = _)
 }
-
-
-
-
 
 

@@ -3,6 +3,9 @@ setGeneric(name = 'match')
 setGeneric(name = '%in%')
 setOldClass(Classes = 'yearqtr')
 setOldClass(Classes = 'yearmon')
+
+
+
 # 'timeDate' from \CRANpkg{timeDate} already S4 :)
 
 #' @title Match \link[base]{Date} to \link[zoo]{yearmon} and \link[zoo]{yearqtr}
