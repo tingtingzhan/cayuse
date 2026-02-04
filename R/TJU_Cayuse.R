@@ -55,26 +55,32 @@ viewAward <- function(
     # subset.data.frame(subset = startsWith(Status, prefix = 'Funded')) # I dont understand this yet
     subset.data.frame(subset = !nzchar(Flags) & !is.na(Award.End.Date)) |>
     within.data.frame(expr = {
-      Admin.Unit <- # not relavent
-        Account.Numbers <- # not relavent
-        Status <- # um..
-        Flags <- # used
+      Admin.Unit = # not relavent
+        Account.Numbers = # not relavent
+        Status = # um..
+        Flags = # used
         NULL
-      Lead.PI <- gsub(' AOI$', replacement = '', x = Lead.PI)
-      Award.Amount <- gsub('^\\$|,', replacement = '', x = Award.Amount) |> as.double()
-      Award.No. <- Award.No. |>
+      Lead.PI = Lead.PI |>
+        gsub(pattern = ' AOI$', replacement = '', x = _)
+      Award.Amount = Award.Amount |>
+        gsub(pattern = '^\\$|,', replacement = '', x = _) |> 
+        as.double()
+      Award.No. = Award.No. |>
         strsplit(split = '-') |> 
         vapply(FUN = \(i) paste(i[1:2], collapse = '-'), FUN.VALUE = '')
-      Award.Notice.Received <- Award.Notice.Received |> as.Date.character(format = '%m/%d/%Y')
-      Award.Begin.Date <- Award.Begin.Date |> as.Date.character(format = '%m/%d/%Y')
-      Award.End.Date <- Award.End.Date |> as.Date.character(format = '%m/%d/%Y')
+      Award.Notice.Received = Award.Notice.Received |> 
+        as.Date.character(format = '%m/%d/%Y')
+      Award.Begin.Date = Award.Begin.Date |> 
+        as.Date.character(format = '%m/%d/%Y')
+      Award.End.Date = Award.End.Date |> 
+        as.Date.character(format = '%m/%d/%Y')
     }) |>
     subset.data.frame(subset = (Award.Amount > 0)) |>
     split.data.frame(f = ~ Award.No.) |>
     lapply(FUN = aggregate_award_) |>
     do.call(what = rbind.data.frame, args = _) |> 
     within.data.frame(expr = {
-      Status2 <- Award.End.Date |> 
+      Status2 = Award.End.Date |> 
         as.double() |> 
         cut.default(
           breaks = c(-Inf, as.double(TJU_Fiscal_Year(fiscal.year)), Inf), 
