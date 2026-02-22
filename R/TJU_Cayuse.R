@@ -39,7 +39,7 @@
 #' @name TJU_Cayuse
 #' @importFrom lubridate year
 #' @importFrom utils read.csv
-#' @importFrom sideway sideway
+#' @importFrom fastmd sideway
 #' @export
 viewAward <- function(
     path = '~/Downloads', 
@@ -130,7 +130,7 @@ aggregate_award_ <- function(x) {
 
 
 #' @rdname TJU_Cayuse
-#' @importFrom sideway sideway
+#' @importFrom fastmd sideway
 #' @export
 viewProposal <- function(
     path = '~/Downloads', 
